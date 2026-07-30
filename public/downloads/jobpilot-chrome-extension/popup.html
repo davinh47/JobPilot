@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="popup.css"><title>JobPilot Saver</title></head>
+  <body>
+    <header><span class="mark">JP</span><div><strong>JobPilot</strong><small>One-click saver</small></div></header>
+    <main>
+      <section id="pairing" hidden>
+        <label>Pairing token<input id="token" type="password" autocomplete="off" placeholder="Paste token from JobPilot"></label>
+        <label>JobPilot URL<input id="baseUrl" type="url" value="http://127.0.0.1:3000" placeholder="https://your-jobpilot.example"></label>
+        <button id="pair">Pair extension</button>
+      </section>
+      <section id="ready" hidden>
+        <div id="page"><strong>Current job page</strong><small id="pageUrl"></small></div>
+        <button id="save">Save to JobPilot</button>
+        <button class="secondary" id="settings">Pairing settings</button>
+      </section>
+      <p id="status" role="status"></p>
+      <a id="openJob" hidden target="_blank">Open saved job</a>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
