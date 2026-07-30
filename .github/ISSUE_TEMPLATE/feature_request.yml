@@ -1,0 +1,41 @@
+name: Feature request
+description: Propose a focused improvement to a JobPilot workflow
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: What becomes difficult or repetitive without this change?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the smallest useful behavior, not only a technical implementation.
+    validations:
+      required: true
+  - type: dropdown
+    id: workflow
+    attributes:
+      label: Workflow
+      options:
+        - Job discovery
+        - Preferences
+        - Pipeline
+        - Resume studio
+        - Application materials
+        - Interview center
+        - AI assistant
+        - Automation and sources
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: privacy
+    attributes:
+      label: Privacy or data considerations
+      description: Note any new external service, personal data, permission, or database change.
+

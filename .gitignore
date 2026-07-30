@@ -1,0 +1,15 @@
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+!.env.cloud.example
+data/
+*.log
+*.tsbuildinfo
+.DS_Store
+tmp/
+test-results/
+playwright-report/
+.vercel
+public/pdf.worker.min.mjs
