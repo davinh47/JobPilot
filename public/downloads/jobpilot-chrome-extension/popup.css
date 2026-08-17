@@ -1,0 +1,24 @@
+:root { color-scheme: light; font-family: Arial, sans-serif; color: #202622; background: #f4f6f4; }
+* { box-sizing: border-box; }
+body { width: 330px; margin: 0; }
+header { height: 64px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; color: #fff; background: #1d2520; }
+header strong, header small { display: block; }
+header strong { font-size: 14px; }
+header small { margin-top: 3px; color: #aeb9b2; font-size: 10px; }
+.mark { width: 34px; height: 34px; display: grid; place-items: center; color: #1d2520; background: #fff; border-radius: 6px; font-size: 11px; font-weight: 800; }
+main { padding: 16px; }
+section { display: grid; gap: 12px; }
+label { display: grid; gap: 6px; color: #555e58; font-size: 11px; font-weight: 700; }
+input { width: 100%; height: 38px; padding: 0 10px; border: 1px solid #ccd3ce; border-radius: 5px; outline: 0; }
+input:focus { border-color: #397f63; box-shadow: 0 0 0 3px rgb(57 127 99 / 12%); }
+button, #openJob { min-height: 40px; padding: 0 14px; display: flex; align-items: center; justify-content: center; color: #fff; background: #397f63; border: 0; border-radius: 5px; font-size: 12px; font-weight: 750; cursor: pointer; text-decoration: none; }
+button.secondary { color: #4f5852; background: #e6eae7; }
+button:disabled { cursor: wait; opacity: .6; }
+#page { padding: 11px; background: #fff; border: 1px solid #dce1dd; border-radius: 5px; }
+#page strong, #page small { display: block; }
+#page strong { font-size: 11px; }
+#page small { margin-top: 5px; color: #717a74; font-size: 9px; line-height: 1.4; overflow-wrap: anywhere; }
+#status { margin: 12px 0 0; color: #646d67; font-size: 10px; line-height: 1.45; }
+#status.error { color: #a44338; }
+#openJob { margin-top: 10px; color: #28634d; background: #e4f0ea; }
+[hidden] { display: none !important; }
