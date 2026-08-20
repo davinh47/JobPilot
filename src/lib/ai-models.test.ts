@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { defaultAiModel, selectAiModel } from "./ai-models";
+import { aiModelCapabilities, defaultAiModel, selectAiModel } from "./ai-models";
 
 test("balanced routing automatically selects task-appropriate DeepSeek models", () => {
   const settings = { aiProvider: "deepseek", aiModel: "deepseek-v4-pro", aiModelStrategy: "balanced" } as const;
@@ -37,4 +37,10 @@ test("economy and quality routing shift task tiers predictably", () => {
 test("an invalid fixed model falls back to the provider balanced model", () => {
   const settings = { aiProvider: "openai", aiModel: "deepseek-v4-pro", aiModelStrategy: "fixed" } as const;
   assert.equal(selectAiModel(settings, "complex"), "gpt-5.6-terra");
+});
+
+test("uses model-specific context and output capabilities", () => {
+  assert.equal(aiModelCapabilities("deepseek", "deepseek-v4-flash").contextWindowTokens, 1_000_000);
+  assert.equal(aiModelCapabilities("openai", "gpt-5.6-sol").maxOutputTokens, 128_000);
+  assert.equal(aiModelCapabilities("deepseek", "unknown-model").contextWindowTokens, 64_000);
 });

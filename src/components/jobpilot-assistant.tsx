@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowUpRight, Bot, Check, FilePlus2, Languages, MessageCircleMore, Navigation, PencilLine, RotateCcw, Send, Sparkles, X } from "lucide-react";
-import { applyAssistantResumeEdits, applyAssistantResumeSync, askJobPilotAssistant } from "@/app/assistant/actions";
+import { applyAssistantResumeEdits, applyAssistantResumeSync } from "@/app/assistant/actions";
 import type { AssistantChatMessage, AssistantResponse, AssistantResumeSyncDraft } from "@/lib/jobpilot-assistant";
 import type { Locale } from "@/lib/i18n";
 
@@ -36,6 +36,10 @@ type AssistantTask = {
   };
   error?: string;
 };
+
+type AssistantMessageResult =
+  | { ok: false; error: string }
+  | { ok: true; response: AssistantResponse; runId?: string; resume?: UiMessage["resume"]; sync?: UiMessage["sync"] };
 
 function historyFrom(messages: UiMessage[]): AssistantChatMessage[] {
   return messages.slice(-12).map((message) => ({
@@ -174,14 +178,22 @@ export function JobPilotAssistant({ locale, initialOpen = false }: { locale: Loc
     setError("");
     setPending(true);
     try {
-      const result = await askJobPilotAssistant({ messages: historyFrom(nextMessages), pathname, locale });
+      const response = await fetch("/api/assistant/message", {
+        method: "POST",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: historyFrom(nextMessages), pathname, locale }),
+      });
+      const result = await response.json() as AssistantMessageResult;
       if (!result.ok) {
         setError(result.error);
         return;
       }
       if (openRef.current) markAssistantRead();
       else setHasUnread(true);
-      setMessages((current) => [...current, { id: crypto.randomUUID(), taskId: "runId" in result ? result.runId : undefined, role: "assistant", content: result.response.reply, response: result.response, resume: "resume" in result ? result.resume : null, sync: "sync" in result ? result.sync : null }]);
+      setMessages((current) => [...current, { id: crypto.randomUUID(), taskId: result.runId, role: "assistant", content: result.response.reply, response: result.response, resume: result.resume ?? null, sync: result.sync ?? null }]);
+    } catch {
+      setError(text("助手请求失败，请稍后重试。", "The assistant request failed. Try again."));
     } finally {
       setPending(false);
     }

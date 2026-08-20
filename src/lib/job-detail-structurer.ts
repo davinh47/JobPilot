@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import { requestStructuredAiJson } from "@/lib/ai-provider";
-import { classifyJobHeading, cleanJobText, jobDescriptionLines, renderJobDescription, type JobDescriptionSection } from "@/lib/job-description";
+import { classifyJobHeading, jobDescriptionLines, renderJobDescription, stripJobPageNoise, type JobDescriptionSection } from "@/lib/job-description";
 import { parseSalaryText } from "@/lib/job-page-parser";
 import type { NormalizedJob } from "@/lib/job-sources/types";
 import { promptVersion } from "@/lib/prompt-registry";
@@ -79,9 +79,9 @@ export async function structureJobDetailWithAi(input: {
   descriptionText?: string;
   pageUrl: string;
 }) {
-  const sourceText = cleanJobText(input.sourceText).slice(0, 35_000);
+  const sourceText = stripJobPageNoise(input.sourceText).slice(0, 35_000);
   if (sourceText.length < 120) return null;
-  const descriptionLines = indexedLines(input.descriptionText || sourceText, 55_000);
+  const descriptionLines = indexedLines(stripJobPageNoise(input.descriptionText || sourceText), 55_000);
   if (!descriptionLines.length) return null;
   const fieldLines = indexedLines(sourceText, 35_000);
   const result = await requestStructuredAiJson({

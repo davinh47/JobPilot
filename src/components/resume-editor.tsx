@@ -20,7 +20,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { BriefcaseBusiness, Check, ChevronDown, Eye, FileText, GripVertical, Lightbulb, ListChecks, Plus, Save, Sparkles, Trash2, WandSparkles, X } from "lucide-react";
 import { createResume, saveResumeVersion, type FormState } from "@/app/actions";
-import { polishResumeField, queueResumeOptimization, restructureResume } from "@/app/resumes/ai-actions";
+import { queueResumeOptimization, restructureResume } from "@/app/resumes/ai-actions";
 import { ResumeExportMenu } from "@/components/resume-export-menu";
 import { wakeBackgroundWorker } from "@/lib/background-worker-client";
 import type { Locale } from "@/lib/i18n";
@@ -199,9 +199,19 @@ export function ResumeEditor({ locale, resumeId, expectedVersionId, resumeLangua
 
   const requestPolish = (targetId: string, label: string, value: string) => startAiTransition(async () => {
     setAiError(""); setFieldSuggestion(null);
-    const result = await polishResumeField({ resumeId: resumeId ?? null, text: value, contextLabel: label, locale: resumeLanguage, jobId: jobId || null });
-    if (!result.ok) setAiError(result.error ?? text("AI 润色失败，请稍后重试。", "AI polishing failed. Try again."));
-    else setFieldSuggestion({ targetId, label, revisedText: result.revisedText, changes: result.changeSummary });
+    try {
+      const response = await fetch("/api/resumes/polish", {
+        method: "POST",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resumeId: resumeId ?? null, text: value, contextLabel: label, locale: resumeLanguage, jobId: jobId || null }),
+      });
+      const result = await response.json() as { ok: boolean; error?: string; revisedText?: string; changeSummary?: string[] };
+      if (!result.ok) setAiError(result.error ?? text("AI 润色失败，请稍后重试。", "AI polishing failed. Try again."));
+      else if (result.revisedText && result.changeSummary) setFieldSuggestion({ targetId, label, revisedText: result.revisedText, changes: result.changeSummary });
+    } catch {
+      setAiError(text("AI 润色请求失败，请稍后重试。", "The AI polishing request failed. Try again."));
+    }
   });
 
   const requestOptimization = () => {

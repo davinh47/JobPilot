@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { evidenceQuoteMatches, mergeGroundedStrengths, type CandidateAnalysis } from "./profile-analysis";
+import { evidenceQuoteMatches, groundedCandidateScalar, mergeGroundedStrengths, type CandidateAnalysis } from "./profile-analysis";
 
 type Strength = CandidateAnalysis["strengths"][number];
 
@@ -30,4 +30,10 @@ test("profile refresh retains previously grounded strengths and removes stale or
     mergeGroundedStrengths(current, previous, resume, ""),
     [current[0], previous[0]],
   );
+});
+
+test("candidate scalar facts must occur in an authoritative scalar source", () => {
+  assert.equal(groundedCandidateScalar("Melbourne", "Sydney/NSW", ""), null);
+  assert.equal(groundedCandidateScalar("Sydney", "Sydney/NSW", ""), "Sydney");
+  assert.equal(groundedCandidateScalar("Australian citizen", "", "Australian citizen with unrestricted work rights"), "Australian citizen");
 });

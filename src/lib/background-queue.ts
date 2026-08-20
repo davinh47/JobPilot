@@ -113,7 +113,7 @@ export async function queueSmartJobImport(input: { userId: string; jobId: string
     jobType: "smart_job_import",
     dedupeKey: input.jobId,
     payloadJson: input,
-    priority: 4,
+    priority: 8,
     maxAttempts: 2,
   });
 }

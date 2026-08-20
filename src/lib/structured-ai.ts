@@ -2,7 +2,8 @@ import { z } from "zod";
 import type { AiProvider } from "@/lib/ai-provider-config";
 import { readLocalSecrets } from "@/lib/secrets";
 import { recordAiUsageBestEffort } from "@/lib/ai-usage";
-import { compactToTokenBudget, estimateTokens } from "@/lib/token-budget";
+import { aiModelCapabilities } from "@/lib/ai-models";
+import { compactPromptToTokenBudget, estimateTokens } from "@/lib/token-budget";
 
 const responseSchema = z.object({
   choices: z.array(z.object({ finish_reason: z.string().nullable().optional(), message: z.object({ content: z.string().nullable() }) })).min(1),
@@ -60,17 +61,20 @@ export async function requestStructuredAiJson<T>(request: StructuredRequest<T>) 
   return requestStructuredAiJsonWithKey({ ...request, provider, apiKey });
 }
 
-export async function requestStructuredAiJsonWithKey<T>({ apiBaseUrl, model, system, user, schema, outputMode = "compact", maxOutputTokens, timeoutMs = 120_000, deepseekThinking, apiKey, fetcher = fetch, userId, agentRunId, taskType = "structured", promptVersion, ...request }: StructuredRequest<T> & { apiKey: string; fetcher?: typeof fetch }) {
+export async function requestStructuredAiJsonWithKey<T>({ apiBaseUrl, model, system, user, schema, outputMode = "compact", maxOutputTokens, timeoutMs, deepseekThinking, apiKey, fetcher = fetch, userId, agentRunId, taskType = "structured", promptVersion, ...request }: StructuredRequest<T> & { apiKey: string; fetcher?: typeof fetch }) {
   const provider = providerFor({ ...request, userId, agentRunId, taskType, promptVersion, apiBaseUrl, model, system, user, schema });
   const name = providerName(provider);
+  const capabilities = aiModelCapabilities(provider, model);
   const jsonSchema = JSON.stringify(z.toJSONSchema(schema));
   const coverageInstruction = outputMode === "complete"
     ? "Cover every distinct, schema-relevant fact or conclusion supported by the source. Keep each item concise and non-repetitive, but do not reduce factual coverage merely to shorten the response."
     : "Prefer the fewest items needed for a useful result.";
   const schemaPrompt = `${system}\n\nReturn one compact JSON object only. The response must validate against this exact JSON Schema. Every required key must be present; use null only where the schema permits null. Do not restate source material unless a schema field explicitly requires it. ${coverageInstruction}\n<OUTPUT_JSON_SCHEMA>\n${jsonSchema}\n</OUTPUT_JSON_SCHEMA>`;
-  const promptTokenLimit = provider === "deepseek" ? 22_000 : 45_000;
-  const initialOutputTokens = maxOutputTokens ?? (provider === "deepseek" ? 8000 : 6000);
-  const requestDeadline = Date.now() + Math.max(1_000, timeoutMs);
+  const initialOutputTokens = Math.min(maxOutputTokens ?? (provider === "deepseek" ? 8000 : 6000), capabilities.maxOutputTokens);
+  const schemaTokens = estimateTokens(schemaPrompt);
+  const contextUserLimit = Math.max(1_000, capabilities.contextWindowTokens - initialOutputTokens - schemaTokens - 8_000);
+  const promptTokenLimit = Math.min(contextUserLimit, capabilities.structuredInputTokens);
+  const requestDeadline = Date.now() + Math.max(1_000, timeoutMs ?? capabilities.defaultTimeoutMs);
   let callIndex = 0;
 
   async function complete(messages: Message[], outputTokens = initialOutputTokens) {
@@ -88,7 +92,7 @@ export async function requestStructuredAiJsonWithKey<T>({ apiBaseUrl, model, sys
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify(isOpenAi
         ? { model, input: messages, text: { format: { type: "json_object" } }, max_output_tokens: outputTokens }
-        : { model, messages, response_format: { type: "json_object" }, max_tokens: outputTokens, stream: false, ...(deepseekThinking ? { thinking: { type: deepseekThinking } } : {}) }),
+        : { model, messages, response_format: { type: "json_object" }, max_tokens: Math.min(outputTokens, capabilities.maxOutputTokens), stream: false, thinking: { type: deepseekThinking ?? "disabled" } }),
       signal: controller.signal,
       });
       if (!response.ok) {
@@ -159,7 +163,7 @@ export async function requestStructuredAiJsonWithKey<T>({ apiBaseUrl, model, sys
     }
   }
 
-  const messages: Message[] = [{ role: "system", content: schemaPrompt }, { role: "user", content: compactToTokenBudget(user, promptTokenLimit) }];
+  const messages: Message[] = [{ role: "system", content: schemaPrompt }, { role: "user", content: compactPromptToTokenBudget(user, promptTokenLimit) }];
   let content: string;
   try {
     content = await complete(messages);

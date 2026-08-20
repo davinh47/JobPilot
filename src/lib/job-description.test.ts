@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { rebuildAiStructuredDescription } from "@/lib/job-detail-structurer";
-import { parseStructuredJobDescription, structureJobDescription } from "@/lib/job-description";
+import { parseStructuredJobDescription, stripJobPageNoise, structureJobDescription } from "@/lib/job-description";
 import { parseSalaryText } from "@/lib/job-page-parser";
 
 test("structures Chinese job descriptions without dropping source content", () => {
@@ -43,4 +43,11 @@ test("recovers inline headings and numbered duties from flattened extension text
   assert.match(result, /## 工作职责\n- 负责RAG产品规划\n- 对接研发上线/);
   assert.match(result, /## 任职要求\n- 本科及以上\n- 熟悉向量数据库/);
   assert.match(result, /## 薪资与福利\nHKD 30k-40k/);
+});
+
+test("removes browser controls from captured job text without dropping the description", () => {
+  const cleaned = stripJobPageNoise("Easy Apply\nSave job\nShare\nAbout the role\nBuild reliable AI systems.\nRequirements\nTypeScript\n查看更多职位\n登录");
+  assert.doesNotMatch(cleaned, /Easy Apply|Save job|Share|查看更多职位|登录/);
+  assert.match(cleaned, /Build reliable AI systems/);
+  assert.match(cleaned, /TypeScript/);
 });

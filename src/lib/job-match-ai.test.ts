@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { calibratedOverallScore, resolvedHardFilterPassed } from "./job-match-ai";
+import { calibratedOverallScore, candidateLocationAssertion, resolvedHardFilterPassed } from "./job-match-ai";
 
 test("AI uncertainty does not hide a deterministically eligible job", () => {
   assert.equal(resolvedHardFilterPassed({
@@ -30,4 +30,10 @@ test("explicit custom hard requirements may still reject a job", () => {
     aiPassed: true,
     hasCustomHardRequirements: false,
   }), false);
+});
+
+test("rejects candidate-location claims copied from search targets", () => {
+  assert.equal(candidateLocationAssertion("候选人目前在墨尔本。", ["墨尔本"], "现居悉尼"), true);
+  assert.equal(candidateLocationAssertion("该岗位位于墨尔本。", ["墨尔本"], "现居悉尼"), false);
+  assert.equal(candidateLocationAssertion("The candidate is based in Melbourne.", ["Melbourne, VIC"], "Based in Melbourne"), false);
 });

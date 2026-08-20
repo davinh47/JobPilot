@@ -4,6 +4,26 @@ import type { AiProvider } from "@/lib/ai-provider-config";
 export type AiTaskTier = "lightweight" | "balanced" | "complex" | "web";
 export type AiModelStrategy = "economy" | "balanced" | "quality" | "fixed";
 
+export type AiModelCapabilities = {
+  contextWindowTokens: number;
+  maxOutputTokens: number;
+  structuredInputTokens: number;
+  defaultTimeoutMs: number;
+};
+
+const modelCapabilities: Record<string, AiModelCapabilities> = {
+  "gpt-5.6-luna": { contextWindowTokens: 1_050_000, maxOutputTokens: 128_000, structuredInputTokens: 180_000, defaultTimeoutMs: 120_000 },
+  "gpt-5.6-terra": { contextWindowTokens: 1_050_000, maxOutputTokens: 128_000, structuredInputTokens: 180_000, defaultTimeoutMs: 150_000 },
+  "gpt-5.6-sol": { contextWindowTokens: 1_050_000, maxOutputTokens: 128_000, structuredInputTokens: 180_000, defaultTimeoutMs: 180_000 },
+  "deepseek-v4-flash": { contextWindowTokens: 1_000_000, maxOutputTokens: 384_000, structuredInputTokens: 120_000, defaultTimeoutMs: 120_000 },
+  "deepseek-v4-pro": { contextWindowTokens: 1_000_000, maxOutputTokens: 384_000, structuredInputTokens: 120_000, defaultTimeoutMs: 180_000 },
+};
+
+const providerFallbackCapabilities: Record<AiProvider, AiModelCapabilities> = {
+  openai: { contextWindowTokens: 128_000, maxOutputTokens: 16_000, structuredInputTokens: 80_000, defaultTimeoutMs: 120_000 },
+  deepseek: { contextWindowTokens: 64_000, maxOutputTokens: 8_000, structuredInputTokens: 40_000, defaultTimeoutMs: 120_000 },
+};
+
 const modelTiers: Record<AiProvider, Record<AiTaskTier, string>> = {
   openai: {
     lightweight: "gpt-5.6-luna",
@@ -44,4 +64,8 @@ export function selectAiModel(settings: Settings, taskTier: AiTaskTier) {
 
 export function defaultAiModel(provider: AiProvider) {
   return modelTiers[provider].balanced;
+}
+
+export function aiModelCapabilities(provider: AiProvider, model: string) {
+  return modelCapabilities[model] ?? providerFallbackCapabilities[provider];
 }
