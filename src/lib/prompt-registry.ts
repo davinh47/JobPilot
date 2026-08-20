@@ -3,7 +3,7 @@ export const promptRegistry = {
   companyResearch: "company-strategy-v4-redacted",
   coverLetter: "cover-letter-v7-claim-coverage",
   jobExtraction: "job-extraction-v3",
-  jobMatch: "job-match-v8-authoritative-resume",
+  jobMatch: "job-match-v9-current-location-grounded",
   profileAnalysis: "candidate-profile-v5-complete-refresh",
   resumeOptimization: "resume-job-optimization-v4-grounded",
   resumePolish: "resume-field-polish-v3-grounded",

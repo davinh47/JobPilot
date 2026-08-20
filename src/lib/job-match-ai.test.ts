@@ -34,6 +34,9 @@ test("explicit custom hard requirements may still reject a job", () => {
 
 test("rejects candidate-location claims copied from search targets", () => {
   assert.equal(candidateLocationAssertion("候选人目前在墨尔本。", ["墨尔本"], "现居悉尼"), true);
+  assert.equal(candidateLocationAssertion("候选人在墨尔本。", ["墨尔本"], ""), true);
+  assert.equal(candidateLocationAssertion("候选人在墨尔本大学完成建筑学学位。", ["墨尔本"], ""), false);
   assert.equal(candidateLocationAssertion("该岗位位于墨尔本。", ["墨尔本"], "现居悉尼"), false);
-  assert.equal(candidateLocationAssertion("The candidate is based in Melbourne.", ["Melbourne, VIC"], "Based in Melbourne"), false);
+  assert.equal(candidateLocationAssertion("The candidate is based in Melbourne.", ["Melbourne, VIC"], "Melbourne, VIC"), false);
+  assert.equal(candidateLocationAssertion("The candidate studied at the University of Melbourne.", ["Melbourne, VIC"], ""), false);
 });
