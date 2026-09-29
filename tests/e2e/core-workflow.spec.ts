@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem("jobpilot:interface-tour:v2", "complete"));
+  await page.addInitScript(() => localStorage.setItem("jobpilot:interface-tour:v3", "complete"));
 });
 
 test("activation dashboard exposes the focused first-run workflow", async ({ page }) => {
@@ -19,7 +19,7 @@ test("core navigation remains keyboard-addressable", async ({ page }) => {
   await expect(discovery).toBeFocused();
   await discovery.press("Enter");
   await expect(page).toHaveURL(/\/matches/);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(/岗位发现|job discovery/i);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(/发现下一站|your next move/i);
 });
 
 test("core pages do not create horizontal viewport overflow", async ({ page }) => {
@@ -52,12 +52,17 @@ test("resume language choices are equal-width without an empty control area", as
   expect(controlBox?.width ?? 0).toBeLessThan((chineseBox?.width ?? 0) + (englishBox?.width ?? 0) + 12);
 });
 
-test("page descriptions use the same available width as their section panel", async ({ page, isMobile }) => {
+test("page descriptions align with and stay within their section panel", async ({ page, isMobile }) => {
   test.skip(Boolean(isMobile), "Desktop width verifies the page-header content constraint.");
   await page.goto("/profile");
+  await expect(page.locator(".profile-analysis-section")).toBeVisible();
   const [descriptionBox, panelBox] = await Promise.all([
     page.locator(".page-description").boundingBox(),
     page.locator(".profile-analysis-section").boundingBox(),
   ]);
-  expect(descriptionBox?.width).toBeCloseTo(panelBox?.width ?? 0, 0);
+  expect(descriptionBox).not.toBeNull();
+  expect(panelBox).not.toBeNull();
+  expect(descriptionBox!.x).toBeCloseTo(panelBox!.x, 0);
+  expect(descriptionBox!.width).toBeGreaterThan(0);
+  expect(descriptionBox!.x + descriptionBox!.width).toBeLessThanOrEqual(panelBox!.x + panelBox!.width + 1);
 });

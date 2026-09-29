@@ -33,6 +33,12 @@ It works as a useful resume editor and application tracker without AI. When AI a
 > [!NOTE]
 > The public `main` and `cloud` release branches are published from the same source tree so product features stay aligned. `main` runs in local-first, single-user mode; `cloud` powers the [hosted JobPilot app](https://try-jobpilot.vercel.app) by enabling Supabase authentication and private storage, hosted libSQL, encrypted per-account model keys, tenant-isolated queues, and a bounded Vercel worker through deployment configuration. See [Cloud deployment](docs/CLOUD_DEPLOYMENT.md).
 
+## v0.3.0 — Focus workspace
+
+A redesigned workspace with horizontal navigation, a focused job list and detail view, a three-pane saved-resume editor on wide screens, and a unified responsive interface. Application tracking now includes an on-demand flow diagram based on saved status history, with separated branches, readable labels, and SVG export. Existing job, resume, AI, and application workflows remain available.
+
+See the [release notes](CHANGELOG.md) and [design system](DESIGN.md).
+
 ## Product Scope
 
 The release path is intentionally narrow:
@@ -68,7 +74,9 @@ JobPilot separates deterministic filters from AI judgment. Clear conflicts such 
 
 Automatically discovered and manually added roles first enter **Job discovery**. A role leaves discovery after you add it to the application pipeline. Ignored roles retain a local exclusion record so later searches do not re-add the same listing.
 
-![JobPilot application pipeline](docs/images/application-pipeline.png)
+![JobPilot application flow summary](docs/images/application-flow.png)
+
+*Illustrative synthetic records; the diagram reflects saved application history, not predicted outcomes.*
 
 ### Resumes remain traceable
 

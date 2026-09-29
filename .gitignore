@@ -11,5 +11,8 @@ data/
 tmp/
 test-results/
 playwright-report/
+.impeccable/review/
+.impeccable/mocks/
+.impeccable/surfaces/
 .vercel
 public/pdf.worker.min.mjs

@@ -46,7 +46,7 @@ export async function runBackgroundResumeParse(payloadJson: Record<string, unkno
     db.select().from(resumeVersions).where(and(eq(resumeVersions.id, payload.sourceVersionId), eq(resumeVersions.resumeId, payload.resumeId))).get(),
     db.select().from(appSettings).where(eq(appSettings.userId, payload.userId)).get(),
   ]);
-  if (!resume || !sourceVersion) throw new Error("The imported resume or its local source version no longer exists.");
+  if (!resume) throw new Error("The imported resume no longer exists.");
   if (!settings?.aiEnabled || !await hasAiProviderKey(settings.aiProvider, payload.userId)) return { skipped: "AI assistance is disabled or its API key is unavailable." };
 
   const templateVersion = await db.select().from(resumeVersions).where(eq(resumeVersions.resumeId, resume.id)).orderBy(desc(resumeVersions.versionNumber)).limit(1).get();
@@ -54,13 +54,14 @@ export async function runBackgroundResumeParse(payloadJson: Record<string, unkno
   const fallback = isPlatformResume(templateVersion.structuredContentJson)
     ? normalizePlatformResume(templateVersion.structuredContentJson)
     : parseResumeText(resume.originalText ?? templateVersion.renderedText ?? "");
-  const sectionTemplate = payload.sectionTemplate ?? (templateVersion.id === sourceVersion.id
+  const sectionTemplate = payload.sectionTemplate ?? (templateVersion.id === sourceVersion?.id
     ? createDefaultPlatformResume(payload.locale).sections
     : fallback.sections);
-  const sourceText = resume.originalText?.trim() || sourceVersion.renderedText?.trim() || "";
+  const sourceText = resume.originalText?.trim() || sourceVersion?.renderedText?.trim() || "";
   if (!sourceText) throw new Error("The imported resume has no source text to organize.");
 
   const model = selectAiModel(settings, "complex");
+  const timeoutMs = settings.aiProvider === "deepseek" ? 240_000 : 180_000;
   const versionName = promptVersion("resumeStructure");
   const run = await db.insert(agentRuns).values({
     userId: payload.userId,
@@ -87,6 +88,7 @@ export async function runBackgroundResumeParse(payloadJson: Record<string, unkno
       agentRunId: run.id,
       promptVersion: versionName,
       sectionTemplate,
+      timeoutMs,
     });
     const latest = await db.select().from(resumeVersions).where(eq(resumeVersions.resumeId, resume.id)).orderBy(desc(resumeVersions.versionNumber)).limit(1).get();
     if (!latest || latest.id !== templateVersion.id || latest.versionNumber !== templateVersion.versionNumber) {

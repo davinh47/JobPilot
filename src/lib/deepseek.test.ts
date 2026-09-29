@@ -116,6 +116,24 @@ test("can disable DeepSeek thinking for deterministic structured mapping", async
   assert.deepEqual(requestBody?.thinking, { type: "disabled" });
 });
 
+test("disables DeepSeek thinking by default for bounded structured tasks", async () => {
+  let requestBody: Record<string, unknown> | undefined;
+  await requestDeepSeekJsonWithKey({
+    provider: "deepseek",
+    apiBaseUrl: "https://api.deepseek.test",
+    model: "deepseek-v4-flash",
+    system: "Map source lines.",
+    user: "Return the map.",
+    schema: z.object({ ok: z.literal(true) }),
+    apiKey: "test-key",
+    fetcher: (async (_input, init) => {
+      requestBody = JSON.parse(String(init?.body)) as Record<string, unknown>;
+      return new Response(JSON.stringify({ choices: [{ finish_reason: "stop", message: { content: "{\"ok\":true}" } }] }), { status: 200, headers: { "Content-Type": "application/json" } });
+    }) as typeof fetch,
+  });
+  assert.deepEqual(requestBody?.thinking, { type: "disabled" });
+});
+
 test("rejects removed AI providers before sending a request", async () => {
   let requested = false;
   await assert.rejects(requestDeepSeekJsonWithKey({

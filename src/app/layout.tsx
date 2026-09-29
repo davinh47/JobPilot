@@ -4,6 +4,8 @@ import { getCurrentUser } from "@/lib/current-user";
 import { getLocale } from "@/lib/i18n";
 import { isCloudDeployment } from "@/lib/deployment";
 import "./globals.css";
+import "./swiss-workspace.css";
+import "./focus-workspace.css";
 
 export const metadata: Metadata = {
   title: "JobPilot",

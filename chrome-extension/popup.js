@@ -29,7 +29,7 @@ function jobPilotBaseUrl(value) {
 }
 
 async function captureJobPage() {
-  const noiseSelectors = "script,style,noscript,template,svg,canvas,iframe,nav,header,footer,aside,form,button,[role='button'],[aria-hidden='true'],[class*='cookie'],[class*='modal'],[class*='breadcrumb'],[class*='share'],[class*='social'],[class*='save-job'],[class*='favorite'],a[class*='button'],a[class*='btn'],a[href*='apply']";
+  const noiseSelectors = "script,style,noscript,template,svg,canvas,iframe,nav,header,footer,aside,form,button,input,select,textarea,[role='button'],[role='navigation'],[role='menu'],[role='menuitem'],[role='dialog'],[role='alert'],[aria-hidden='true'],[class*='cookie'],[class*='modal'],[class*='breadcrumb'],[class*='share'],[class*='social'],[class*='save-job'],[class*='favorite'],[class*='recommend'],[class*='similar-job'],[data-testid*='apply'],[data-automation*='apply'],a[class*='button'],a[class*='btn'],a[href*='apply']";
   const normalize = (value) => value
     .replace(/\u00a0/g, " ")
     .replace(/\r\n?/g, "\n")
@@ -52,14 +52,12 @@ async function captureJobPage() {
   const firstElement = (selectors) => selectors.map((selector) => document.querySelector(selector)).find(Boolean) || null;
   const first = (selectors) => selectors.map(text).find(Boolean) || null;
   const canonical = document.querySelector("link[rel='canonical']")?.href || location.href;
-  const descriptionElement = firstElement(["[data-automation='jobAdDetails']", ".jobs-description__content", ".show-more-less-html__markup", "[data-testid='job-description']", "[class*='job-description']", "article", "main"]);
+  const descriptionElement = firstElement(["[data-automation='jobAdDetails']", ".jobs-description__content", ".show-more-less-html__markup", "[data-testid='job-description']", "[data-testid='jobDescriptionText']", "[class*='job-description']", "[class*='jobDescription']", "[itemprop='description']", "article", "main"]);
   const targetedText = readable(descriptionElement);
   const cleanedBodyText = readable(document.body);
-  const rawBodyText = normalize(document.body?.innerText || document.body?.textContent || "");
-  const candidates = [targetedText, cleanedBodyText, rawBodyText].filter(Boolean);
   const jobSignals = /responsibilities|requirements|qualifications|job description|about the role|工作职责|岗位职责|任职要求|职位描述|岗位描述/i;
-  const description = candidates
-    .sort((left, right) => Number(jobSignals.test(right)) - Number(jobSignals.test(left)) || right.length - left.length)[0] || "";
+  const targetedIsUseful = targetedText && targetedText.length >= 120 && jobSignals.test(targetedText);
+  const description = targetedIsUseful ? targetedText : cleanedBodyText || targetedText || "";
   return {
     url: canonical,
     capturedText: description?.slice(0, 120000) || "",

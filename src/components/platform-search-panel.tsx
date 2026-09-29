@@ -25,7 +25,7 @@ export function PlatformSearchPanel({ locale, targets }: Props) {
   return (
     <section className="source-list-section platform-search-section">
       <div className="section-heading">
-        <div><p className="eyebrow">JOB PLATFORMS</p><h2>{locale === "zh" ? "求职平台搜索" : "Job platform searches"}</h2></div>
+        <div><h2>{locale === "zh" ? "求职平台搜索" : "Job platform searches"}</h2></div>
         <Link className="button button-secondary" href="/jobs/new"><Plus size={16} />{locale === "zh" ? "导入找到的岗位" : "Import a found job"}</Link>
       </div>
       <div className="platform-search-toolbar">

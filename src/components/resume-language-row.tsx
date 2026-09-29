@@ -88,7 +88,7 @@ export function ResumeLanguageRow({
             : <Link className="button button-secondary compact-button" href="/profile"><Brain size={15} />{text("AI 画像", "AI profile")}</Link>
         : null}
       <Link className="button button-secondary compact-button" href={`/resumes/${selected.id}/preview`}><Eye size={15} />{text("预览", "Preview")}</Link>
-      <Link className="button button-secondary compact-button" href={`/resumes/${selected.id}/edit`}><PenLine size={15} />{text("编辑", "Edit")}</Link>
+      <Link className="button button-primary compact-button" href={`/resumes/${selected.id}/edit`}><PenLine size={15} />{text("编辑", "Edit")}</Link>
       <form action={deleteResume}><input name="resumeId" type="hidden" value={selected.id} /><ConfirmDeleteButton
         cancelLabel={text("取消", "Cancel")}
         confirmLabel={text("确认删除", "Delete resume")}

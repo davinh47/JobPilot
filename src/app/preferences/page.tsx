@@ -21,7 +21,7 @@ export default async function PreferencesPage() {
   return (
     <div className="page-shell preferences-page">
       <Link className="back-link" href="/matches"><ChevronLeft size={16} />{pick(locale, "返回岗位发现", "Back to job discovery")}</Link>
-      <header className="page-header compact-header"><div><p className="eyebrow">SEARCH PROFILE</p><h1>{pick(locale, "岗位搜索偏好", "Job search preferences")}</h1><p className="page-description">{pick(locale, "这些条件同时用于网络搜索、硬过滤和岗位匹配；用户设置始终优先于 AI 推断。", "These preferences drive web search, hard filters, and job matching. User settings always override AI inference.")}</p></div></header>
+      <header className="page-header compact-header"><div><h1>{pick(locale, "岗位搜索偏好", "Job search preferences")}</h1><p className="page-description">{pick(locale, "这些条件同时用于网络搜索、硬过滤和岗位匹配；用户设置始终优先于 AI 推断。", "These preferences drive web search, hard filters, and job matching. User settings always override AI inference.")}</p></div></header>
       <JobPreferencesForm locale={locale} preferences={{
         targets: targets.map((target) => {
           const savedLocations = target.locationPreferencesJson.length ? target.locationPreferencesJson : target.locationsJson.map((location) => ({ location, requiresVisaSponsorship: target.requiresVisaSponsorship, workAuthorizationNotes: target.workAuthorizationNotes ?? "" }));

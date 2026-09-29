@@ -9,6 +9,7 @@ import { saveDiscoveredJob } from "@/lib/job-discovery";
 import { extractCapturedJobText, extractJobFromCapturedText, extractJobFromPage } from "@/lib/job-page-parser";
 import { fetchPublicPage } from "@/lib/public-web";
 import { classifyListingPage } from "@/lib/listing-check";
+import { stripJobPageNoise } from "@/lib/job-description";
 
 export const capturedJobHintsSchema = z.object({
   title: z.string().trim().max(300).nullable().optional(),
@@ -22,7 +23,7 @@ export const capturedJobHintsSchema = z.object({
 export type CapturedJobHints = z.infer<typeof capturedJobHintsSchema>;
 
 function cleanText(value: string) {
-  return value.replace(/\u00a0/g, " ").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+  return stripJobPageNoise(value);
 }
 
 type SmartImportSource = "url_import" | "chrome_extension";

@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useOptimistic, useState, useTransition } from "react";
+import { useEffect, useOptimistic, useRef, useState, useTransition, type KeyboardEvent } from "react";
 import { ExternalLink, LayoutGrid, List, Pencil, Plus, Save, Settings2, X } from "lucide-react";
 import { addApplicationStatus, deleteApplication, updateApplicationDetails, updateApplicationStatusLabels, updateApplicationStatusOptimistic } from "@/app/actions";
 import { ConfirmDeleteButton } from "@/components/confirm-delete-button";
 import type { Locale } from "@/lib/i18n";
 import { initials } from "@/lib/utils";
+import { PipelineSummary } from "@/components/pipeline-summary";
+import type { PipelineTransition } from "@/lib/pipeline-summary";
 
 type Status = { id: string; slug: string; label: string; labelZh: string; labelEn: string; color: string };
 type PipelineRow = {
@@ -41,6 +43,18 @@ function displayDate(value: string, locale: Locale) {
   return new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" }).format(date);
 }
 
+function containDialogFocus(event: KeyboardEvent<HTMLDialogElement>) {
+  if (event.key !== "Tab") return;
+  const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(
+    'a[href], button, input, select, textarea, [tabindex]',
+  )).filter((item) => item.tabIndex >= 0 && !item.matches(":disabled") && item.getClientRects().length > 0);
+  const first = items[0];
+  const last = items.at(-1);
+  if (!first || !last) { event.preventDefault(); event.currentTarget.focus(); return; }
+  if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+  else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+}
+
 function ApplicationEditDialog({ error, locale, onClose, onSave, row, saving }: {
   error: string;
   locale: Locale;
@@ -60,17 +74,18 @@ function ApplicationEditDialog({ error, locale, onClose, onSave, row, saving }: 
     nextAction: row.nextAction,
   });
   const update = (field: keyof ApplicationDetailsDraft, value: string) => setDraft((current) => ({ ...current, [field]: value }));
+  const dialogRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !saving) onClose();
-    };
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [onClose, saving]);
+    const dialog = dialogRef.current;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    dialog?.showModal();
+    dialog?.querySelector<HTMLButtonElement>("button")?.focus();
+    return () => { dialog?.close(); previousFocus?.focus(); };
+  }, []);
 
-  return <div className="pipeline-edit-backdrop" onMouseDown={(event) => { if (event.currentTarget === event.target && !saving) onClose(); }}>
-    <form aria-modal="true" className="pipeline-edit-dialog" onSubmit={(event) => { event.preventDefault(); onSave(draft); }} role="dialog">
-      <header><div><p className="eyebrow">APPLICATION DETAILS</p><h2>{text("编辑申请条目", "Edit application")}</h2></div><button aria-label={text("关闭", "Close")} className="icon-button" disabled={saving} onClick={onClose} type="button"><X size={17} /></button></header>
+  return <dialog ref={dialogRef} onKeyDown={containDialogFocus} aria-label={text("编辑申请条目", "Edit application")} className="pipeline-modal" onCancel={(event) => { event.preventDefault(); if (!saving) onClose(); }} onClick={(event) => { if (event.currentTarget === event.target && !saving) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose(); } }}>
+    <form className="pipeline-edit-dialog" onSubmit={(event) => { event.preventDefault(); onSave(draft); }}>
+      <header><div><h2>{text("编辑申请条目", "Edit application")}</h2></div><button aria-label={text("关闭", "Close")} className="icon-button" disabled={saving} onClick={onClose} type="button"><X size={17} /></button></header>
       <div className="pipeline-edit-fields">
         <div className="form-row two-columns"><label>{text("公司", "Company")}<input onChange={(event) => update("companyName", event.target.value)} required value={draft.companyName} /></label><label>{text("岗位", "Role")}<input onChange={(event) => update("title", event.target.value)} required value={draft.title} /></label></div>
         <div className="form-row two-columns"><label>{text("地点", "Location")}<input onChange={(event) => update("location", event.target.value)} value={draft.location} /></label><label>{text("岗位网页", "Job URL")}<input onChange={(event) => update("canonicalUrl", event.target.value)} placeholder="https://..." type="url" value={draft.canonicalUrl} /></label></div>
@@ -80,7 +95,7 @@ function ApplicationEditDialog({ error, locale, onClose, onSave, row, saving }: 
       {error ? <p className="form-error" role="alert">{error}</p> : null}
       <footer><button className="button button-secondary" disabled={saving} onClick={onClose} type="button">{text("取消", "Cancel")}</button><button className="button button-primary" disabled={saving} type="submit">{saving ? text("保存中…", "Saving…") : text("保存修改", "Save changes")}</button></footer>
     </form>
-  </div>;
+  </dialog>;
 }
 
 function StatusManagerDialog({ locale, onClose, statuses }: {
@@ -109,17 +124,18 @@ function StatusManagerDialog({ locale, onClose, statuses }: {
       setPendingStatusId(null);
     });
   };
+  const dialogRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !saving) onClose();
-    };
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [onClose, saving]);
+    const dialog = dialogRef.current;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    dialog?.showModal();
+    dialog?.querySelector<HTMLButtonElement>("button")?.focus();
+    return () => { dialog?.close(); previousFocus?.focus(); };
+  }, []);
 
-  return <div className="pipeline-edit-backdrop" onMouseDown={(event) => { if (event.currentTarget === event.target && !saving) onClose(); }}>
-    <section aria-modal="true" className="status-manager-dialog" role="dialog">
-      <header><div><p className="eyebrow">PIPELINE LABELS</p><h2>{text("管理申请状态", "Manage application statuses")}</h2></div><button aria-label={text("关闭", "Close")} className="icon-button" disabled={saving} onClick={onClose} type="button"><X size={17} /></button></header>
+  return <dialog ref={dialogRef} onKeyDown={containDialogFocus} aria-label={text("管理申请状态", "Manage application statuses")} className="pipeline-modal" onCancel={(event) => { event.preventDefault(); if (!saving) onClose(); }} onClick={(event) => { if (event.currentTarget === event.target && !saving) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose(); } }}>
+    <section className="status-manager-dialog" tabIndex={-1}>
+      <header><div><h2>{text("管理申请状态", "Manage application statuses")}</h2></div><button aria-label={text("关闭", "Close")} className="icon-button" disabled={saving} onClick={onClose} type="button"><X size={17} /></button></header>
       <p className="status-manager-note">{text("可以修改默认和自建状态的显示名称。内部流程标识不会改变，已有申请记录也会保留。", "Rename default and custom statuses without changing their workflow identity or existing applications.")}</p>
       <div className="status-manager-list">
         {drafts.map((status) => <form className="status-manager-row" key={status.id} onSubmit={(event) => { event.preventDefault(); save(status); }}>
@@ -132,10 +148,11 @@ function StatusManagerDialog({ locale, onClose, statuses }: {
       {error ? <p className="form-error" role="alert">{error}</p> : null}
       <footer><button className="button button-primary" disabled={saving} onClick={onClose} type="button">{text("完成", "Done")}</button></footer>
     </section>
-  </div>;
+  </dialog>;
 }
 
-export function PipelineWorkspace({ locale, rows, statuses }: { locale: Locale; rows: PipelineRow[]; statuses: Status[] }) {
+export function PipelineWorkspace({ locale, rows, statuses, events = [] }: { locale: Locale; rows: PipelineRow[]; statuses: Status[]; events?: PipelineTransition[] }) {
+  const boardRef = useRef<HTMLDivElement>(null);
   const [view, setView] = useState<"board" | "list">("board");
   const [addingStatus, setAddingStatus] = useState(false);
   const [managingStatuses, setManagingStatuses] = useState(false);
@@ -190,20 +207,22 @@ export function PipelineWorkspace({ locale, rows, statuses }: { locale: Locale; 
   };
 
   return (
-    <div className="page-shell wide-page">
+    <div className="page-shell wide-page pipeline-page">
       <header className="page-header">
-        <div><p className="eyebrow">APPLICATIONS</p><h1>{text("申请进度", "Application pipeline")}</h1><p className="page-description">{text("用看板推进阶段，用列表快速比较截止日期、申请日期和岗位信息。", "Move work through stages on the board, or compare deadlines and application details in the list.")}</p></div>
+        <div><h1>{text("申请进度", "Application pipeline")}</h1><p className="page-description">{text("用看板推进阶段，用列表快速比较截止日期、申请日期和岗位信息。", "Move work through stages on the board, or compare deadlines and application details in the list.")}</p></div>
         <Link className="button button-primary" href="/matches"><Plus size={16} />{text("从岗位发现添加", "Add from discovery")}</Link>
       </header>
 
+      <PipelineSummary locale={locale} rows={rows} statuses={statuses} events={events} />
+
       <div className="pipeline-toolbar">
         <div className="segmented-control view-toggle" aria-label={text("视图模式", "View mode")} data-tour="pipeline-views">
-          <button className={view === "board" ? "active" : ""} onClick={() => setView("board")} type="button"><LayoutGrid size={15} />{text("看板", "Board")}</button>
-          <button className={view === "list" ? "active" : ""} onClick={() => setView("list")} type="button"><List size={15} />{text("列表", "List")}</button>
+          <button aria-pressed={view === "board"} className={view === "board" ? "active" : ""} onClick={() => setView("board")} type="button"><LayoutGrid size={15} />{text("看板", "Board")}</button>
+          <button aria-pressed={view === "list"} className={view === "list" ? "active" : ""} onClick={() => setView("list")} type="button"><List size={15} />{text("列表", "List")}</button>
         </div>
         {addingStatus ? (
           <form action={addApplicationStatus} className="inline-status-form">
-            <input autoFocus maxLength={30} name="label" placeholder={text("新状态名称", "New status name")} required />
+            <input aria-label={text("新状态名称", "New status name")} autoFocus maxLength={30} name="label" placeholder={text("新状态名称", "New status name")} required />
             <button className="button button-primary" type="submit">{text("添加", "Add")}</button>
             <button className="button button-secondary" onClick={() => setAddingStatus(false)} type="button">{text("取消", "Cancel")}</button>
           </form>
@@ -211,16 +230,19 @@ export function PipelineWorkspace({ locale, rows, statuses }: { locale: Locale; 
       </div>
 
       {view === "board" ? (
-        <div className="pipeline-board" style={{ gridTemplateColumns: `repeat(${Math.max(statuses.length, 1)}, minmax(210px, 1fr))` }}>
+        <><nav className="pipeline-stage-index" aria-label={text("跳至申请阶段", "Jump to stage")}>{statuses.map((status, index) => <button key={status.id} type="button" onClick={() => boardRef.current?.children[index]?.scrollIntoView({ block: "nearest", inline: "start" })}>{status.label}<span>{optimisticRows.filter((row) => row.status === status.slug).length}</span></button>)}</nav><div ref={boardRef} aria-label={text("申请阶段看板，可横向滚动", "Application stages, scroll horizontally")} className="pipeline-board" tabIndex={0}>
           {statuses.map((status) => {
             const stageRows = optimisticRows.filter((row) => row.status === status.slug);
             return (
-              <section className={`pipeline-column status-color-${status.color}`} key={status.id}>
+              <section className={`pipeline-column ${stageRows.length === 0 ? "is-empty" : ""} status-color-${status.color}`} key={status.id}>
                 <header><h2><span className="status-color-dot" />{status.label}</h2><span>{stageRows.length}</span></header>
                 <div className="pipeline-items">
                   {stageRows.map((row) => (
                     <article className="pipeline-card" key={row.applicationId}>
                       <Link href={`/jobs/${row.jobId}`}><span className="company-avatar small">{initials(row.companyName)}</span><strong>{row.title}</strong><small>{row.companyName}</small></Link>
+                      {row.location ? <span className="pipeline-card-location">{row.location}</span> : null}
+                      {row.deadlineValue ? <span className="pipeline-card-deadline">{text("截止", "Closes")} · {displayDate(row.deadlineValue, locale)}</span> : null}
+                      {row.nextAction ? <p className="pipeline-next-action"><span>{text("下一步", "Next action")}</span>{row.nextAction}</p> : null}
                       <div className="card-status-form"><select aria-label={text("申请状态", "Application status")} disabled={statusPending && pendingStatusId === row.applicationId} onChange={(event) => changeStatus(row, event.target.value)} value={row.status}>{statuses.map((option) => <option key={option.id} value={option.slug}>{option.label}</option>)}</select></div>
                       <div className="pipeline-card-actions"><button aria-label={text("编辑申请条目", "Edit application")} className="icon-button" onClick={() => { setEditError(""); setEditing(row); }} title={text("编辑申请条目", "Edit application")} type="button"><Pencil size={15} /></button><form action={deleteApplication} className="pipeline-card-delete"><input name="applicationId" type="hidden" value={row.applicationId} /><ConfirmDeleteButton cancelLabel={text("取消", "Cancel")} confirmLabel={text("移出申请进度", "Remove application")} description={text(`将删除 ${row.companyName} · ${row.title} 的申请时间线、材料和面试记录。岗位及其网页快照会保留，并重新出现在岗位推荐中。`, `This removes the application timeline, materials, and interviews for ${row.companyName} · ${row.title}. The job and its snapshots remain and return to discovery.`)} title={text("移出申请进度？", "Remove from pipeline?")} triggerLabel={text("删除申请记录", "Delete application record")} /></form></div>
                     </article>
@@ -230,7 +252,7 @@ export function PipelineWorkspace({ locale, rows, statuses }: { locale: Locale; 
               </section>
             );
           })}
-        </div>
+        </div></>
       ) : (
         <section className="data-table pipeline-list-table">
           <div className="table-head pipeline-list-grid"><span>{text("公司", "Company")}</span><span>{text("岗位", "Role")}</span><span>{text("地点", "Location")}</span><span>{text("网页", "Link")}</span><span>{text("截止日期", "Deadline")}</span><span>{text("申请日期", "Applied")}</span><span>{text("申请状态", "Status")}</span><span aria-label={text("操作", "Actions")} /></div>
@@ -242,7 +264,7 @@ export function PipelineWorkspace({ locale, rows, statuses }: { locale: Locale; 
               <span>{row.url ? <a className="icon-link" href={row.url} rel="noreferrer" target="_blank" title={text("打开岗位网页", "Open job page")}><ExternalLink size={16} /></a> : "—"}</span>
               <span>{displayDate(row.deadlineValue, locale)}</span>
               <span>{displayDate(row.appliedAtValue, locale)}</span>
-              <div className="list-status-form"><select disabled={statusPending && pendingStatusId === row.applicationId} onChange={(event) => changeStatus(row, event.target.value)} value={row.status}>{statuses.map((option) => <option key={option.id} value={option.slug}>{option.label}</option>)}</select></div>
+              <div className="list-status-form"><select aria-label={text("申请状态", "Application status")} disabled={statusPending && pendingStatusId === row.applicationId} onChange={(event) => changeStatus(row, event.target.value)} value={row.status}>{statuses.map((option) => <option key={option.id} value={option.slug}>{option.label}</option>)}</select></div>
               <div className="pipeline-list-actions"><button aria-label={text("编辑申请条目", "Edit application")} className="icon-button" onClick={() => { setEditError(""); setEditing(row); }} title={text("编辑申请条目", "Edit application")} type="button"><Pencil size={15} /></button><form action={deleteApplication} className="pipeline-list-delete"><input name="applicationId" type="hidden" value={row.applicationId} /><ConfirmDeleteButton cancelLabel={text("取消", "Cancel")} confirmLabel={text("移出申请进度", "Remove application")} description={text(`将删除 ${row.companyName} · ${row.title} 的申请时间线、材料和面试记录。岗位及其网页快照会保留，并重新出现在岗位推荐中。`, `This removes the application timeline, materials, and interviews for ${row.companyName} · ${row.title}. The job and its snapshots remain and return to discovery.`)} title={text("移出申请进度？", "Remove from pipeline?")} triggerLabel={text("删除申请记录", "Delete application record")} /></form></div>
             </div>
           ))}

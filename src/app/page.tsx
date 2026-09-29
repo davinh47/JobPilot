@@ -44,7 +44,7 @@ export default async function Home() {
   return (
     <div className="page-shell activation-page">
       <header className="activation-hero">
-        <div><p className="eyebrow">JOB SEARCH WORKSPACE</p><h1>{pick(locale, "先完成一次真实求职闭环", "Complete one real job-search loop")}</h1><p>{pick(locale, "JobPilot 的核心路径是：可信简历 → 明确目标 → 岗位判断 → 人工确认材料 → 申请跟进。AI 只在需要判断和改写时介入。", "JobPilot’s core path is: factual resume → clear target → role assessment → human-approved materials → application follow-up. AI only assists where judgment or rewriting helps.")}</p></div>
+        <div><h1>{pick(locale, "先完成一次真实求职闭环", "Complete one real job-search loop")}</h1><p>{pick(locale, "JobPilot 的核心路径是：可信简历 → 明确目标 → 岗位判断 → 人工确认材料 → 申请跟进。AI 只在需要判断和改写时介入。", "JobPilot’s core path is: factual resume → clear target → role assessment → human-approved materials → application follow-up. AI only assists where judgment or rewriting helps.")}</p></div>
         <div className="activation-progress"><strong>{completed}/{steps.length}</strong><span>{pick(locale, "启动项已就绪", "setup items ready")}</span></div>
       </header>
       <section className="activation-steps" aria-label={pick(locale, "启动清单", "Activation checklist")}>
@@ -55,7 +55,7 @@ export default async function Home() {
           <ArrowRight size={17} />
         </Link>)}
       </section>
-      <section className="activation-next"><div><p className="eyebrow">NEXT BEST ACTION</p><h2>{next.title}</h2></div><Link className="button button-primary" href={next.href}>{pick(locale, "继续", "Continue")}<ArrowRight size={16} /></Link></section>
+      <section className="activation-next"><div><h2>{next.title}</h2></div><Link className="button button-primary" href={next.href}>{pick(locale, "继续", "Continue")}<ArrowRight size={16} /></Link></section>
       {(applicationCount?.value ?? 0) > 0 ? <Link className="activation-pipeline-link" href="/pipeline"><Gauge size={18} /><span><strong>{applicationCount?.value}</strong>{pick(locale, "个申请正在进度中", "applications in your pipeline")}</span><ArrowRight size={16} /></Link> : null}
     </div>
   );

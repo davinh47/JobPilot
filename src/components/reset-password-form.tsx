@@ -40,7 +40,7 @@ export function ResetPasswordForm({ locale, invalidLink = false }: { locale: "zh
   return <div className="login-shell">
     <section className="login-panel">
       <AuthLanguageSwitch locale={locale} />
-      <header><span className="brand-mark"><BriefcaseBusiness size={20} /></span><div><p className="eyebrow">JOBPILOT CLOUD</p><h1>{text("设置新密码", "Set a new password")}</h1><p>{text("使用至少 8 个字符。更新后，请使用新密码重新登录。", "Use at least 8 characters. After updating, sign in again with the new password.")}</p></div></header>
+      <header><span className="brand-mark"><BriefcaseBusiness size={20} /></span><div><h1>{text("设置新密码", "Set a new password")}</h1><p>{text("使用至少 8 个字符。更新后，请使用新密码重新登录。", "Use at least 8 characters. After updating, sign in again with the new password.")}</p></div></header>
       <form className="login-email-form" onSubmit={submit}>
         <label>{text("新密码", "New password")}<span className="input-with-icon"><LockKeyhole size={16} /><input autoComplete="new-password" minLength={8} name="password" required type="password" /></span></label>
         <label>{text("确认新密码", "Confirm new password")}<span className="input-with-icon"><LockKeyhole size={16} /><input autoComplete="new-password" minLength={8} name="confirmation" required type="password" /></span></label>

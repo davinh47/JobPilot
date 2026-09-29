@@ -1,0 +1,465 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-29T08:59:10.322773+00:00",
+  "title": "Design System: JobPilot",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Cobalt",
+        "tonalRamp": [
+          "oklch(15.00% 0.24369 263.37)",
+          "oklch(26.43% 0.24369 263.37)",
+          "oklch(37.86% 0.24369 263.37)",
+          "oklch(49.29% 0.24369 263.37)",
+          "oklch(60.71% 0.24369 263.37)",
+          "oklch(72.14% 0.24369 263.37)",
+          "oklch(83.57% 0.24369 263.37)",
+          "oklch(95.00% 0.24369 263.37)"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Deep cobalt",
+        "tonalRamp": [
+          "oklch(15.00% 0.21763 263.24)",
+          "oklch(26.43% 0.21763 263.24)",
+          "oklch(37.86% 0.21763 263.24)",
+          "oklch(49.29% 0.21763 263.24)",
+          "oklch(60.71% 0.21763 263.24)",
+          "oklch(72.14% 0.21763 263.24)",
+          "oklch(83.57% 0.21763 263.24)",
+          "oklch(95.00% 0.21763 263.24)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Pale cobalt",
+        "tonalRamp": [
+          "oklch(15.00% 0.01695 267.79)",
+          "oklch(26.43% 0.01695 267.79)",
+          "oklch(37.86% 0.01695 267.79)",
+          "oklch(49.29% 0.01695 267.79)",
+          "oklch(60.71% 0.01695 267.79)",
+          "oklch(72.14% 0.01695 267.79)",
+          "oklch(83.57% 0.01695 267.79)",
+          "oklch(95.00% 0.01695 267.79)"
+        ]
+      },
+      "canvas": {
+        "role": "neutral",
+        "displayName": "White canvas",
+        "tonalRamp": [
+          "oklch(15.00% 0.00000 0.00)",
+          "oklch(26.43% 0.00000 0.00)",
+          "oklch(37.86% 0.00000 0.00)",
+          "oklch(49.29% 0.00000 0.00)",
+          "oklch(60.71% 0.00000 0.00)",
+          "oklch(72.14% 0.00000 0.00)",
+          "oklch(83.57% 0.00000 0.00)",
+          "oklch(95.00% 0.00000 0.00)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "White surface",
+        "tonalRamp": [
+          "oklch(15.00% 0.00000 0.00)",
+          "oklch(26.43% 0.00000 0.00)",
+          "oklch(37.86% 0.00000 0.00)",
+          "oklch(49.29% 0.00000 0.00)",
+          "oklch(60.71% 0.00000 0.00)",
+          "oklch(72.14% 0.00000 0.00)",
+          "oklch(83.57% 0.00000 0.00)",
+          "oklch(95.00% 0.00000 0.00)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Black ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.01040 276.38)",
+          "oklch(26.43% 0.01040 276.38)",
+          "oklch(37.86% 0.01040 276.38)",
+          "oklch(49.29% 0.01040 276.38)",
+          "oklch(60.71% 0.01040 276.38)",
+          "oklch(72.14% 0.01040 276.38)",
+          "oklch(83.57% 0.01040 276.38)",
+          "oklch(95.00% 0.01040 276.38)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Slate text",
+        "tonalRamp": [
+          "oklch(15.00% 0.03330 261.37)",
+          "oklch(26.43% 0.03330 261.37)",
+          "oklch(37.86% 0.03330 261.37)",
+          "oklch(49.29% 0.03330 261.37)",
+          "oklch(60.71% 0.03330 261.37)",
+          "oklch(72.14% 0.03330 261.37)",
+          "oklch(83.57% 0.03330 261.37)",
+          "oklch(95.00% 0.03330 261.37)"
+        ]
+      },
+      "text-soft": {
+        "role": "neutral",
+        "displayName": "Soft slate",
+        "tonalRamp": [
+          "oklch(15.00% 0.03599 261.63)",
+          "oklch(26.43% 0.03599 261.63)",
+          "oklch(37.86% 0.03599 261.63)",
+          "oklch(49.29% 0.03599 261.63)",
+          "oklch(60.71% 0.03599 261.63)",
+          "oklch(72.14% 0.03599 261.63)",
+          "oklch(83.57% 0.03599 261.63)",
+          "oklch(95.00% 0.03599 261.63)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Structural line",
+        "tonalRamp": [
+          "oklch(15.00% 0.01445 254.61)",
+          "oklch(26.43% 0.01445 254.61)",
+          "oklch(37.86% 0.01445 254.61)",
+          "oklch(49.29% 0.01445 254.61)",
+          "oklch(60.71% 0.01445 254.61)",
+          "oklch(72.14% 0.01445 254.61)",
+          "oklch(83.57% 0.01445 254.61)",
+          "oklch(95.00% 0.01445 254.61)"
+        ]
+      },
+      "line-soft": {
+        "role": "neutral",
+        "displayName": "Soft line",
+        "tonalRamp": [
+          "oklch(15.00% 0.00799 253.85)",
+          "oklch(26.43% 0.00799 253.85)",
+          "oklch(37.86% 0.00799 253.85)",
+          "oklch(49.29% 0.00799 253.85)",
+          "oklch(60.71% 0.00799 253.85)",
+          "oklch(72.14% 0.00799 253.85)",
+          "oklch(83.57% 0.00799 253.85)",
+          "oklch(95.00% 0.00799 253.85)"
+        ]
+      },
+      "field-border": {
+        "role": "neutral",
+        "displayName": "Field border",
+        "tonalRamp": [
+          "oklch(15.00% 0.02385 258.36)",
+          "oklch(26.43% 0.02385 258.36)",
+          "oklch(37.86% 0.02385 258.36)",
+          "oklch(49.29% 0.02385 258.36)",
+          "oklch(60.71% 0.02385 258.36)",
+          "oklch(72.14% 0.02385 258.36)",
+          "oklch(83.57% 0.02385 258.36)",
+          "oklch(95.00% 0.02385 258.36)"
+        ]
+      },
+      "surface-muted": {
+        "role": "neutral",
+        "displayName": "Ice-gray plane",
+        "tonalRamp": [
+          "oklch(15.00% 0.00624 255.47)",
+          "oklch(26.43% 0.00624 255.47)",
+          "oklch(37.86% 0.00624 255.47)",
+          "oklch(49.29% 0.00624 255.47)",
+          "oklch(60.71% 0.00624 255.47)",
+          "oklch(72.14% 0.00624 255.47)",
+          "oklch(83.57% 0.00624 255.47)",
+          "oklch(95.00% 0.00624 255.47)"
+        ]
+      },
+      "surface-subtle": {
+        "role": "neutral",
+        "displayName": "Subtle surface",
+        "tonalRamp": [
+          "oklch(15.00% 0.00453 258.32)",
+          "oklch(26.43% 0.00453 258.32)",
+          "oklch(37.86% 0.00453 258.32)",
+          "oklch(49.29% 0.00453 258.32)",
+          "oklch(60.71% 0.00453 258.32)",
+          "oklch(72.14% 0.00453 258.32)",
+          "oklch(83.57% 0.00453 258.32)",
+          "oklch(95.00% 0.00453 258.32)"
+        ]
+      },
+      "mint": {
+        "role": "semantic",
+        "displayName": "Positive green",
+        "tonalRamp": [
+          "oklch(15.00% 0.10146 162.63)",
+          "oklch(26.43% 0.10146 162.63)",
+          "oklch(37.86% 0.10146 162.63)",
+          "oklch(49.29% 0.10146 162.63)",
+          "oklch(60.71% 0.10146 162.63)",
+          "oklch(72.14% 0.10146 162.63)",
+          "oklch(83.57% 0.10146 162.63)",
+          "oklch(95.00% 0.10146 162.63)"
+        ]
+      },
+      "mint-soft": {
+        "role": "semantic",
+        "displayName": "Pale green",
+        "tonalRamp": [
+          "oklch(15.00% 0.01568 160.62)",
+          "oklch(26.43% 0.01568 160.62)",
+          "oklch(37.86% 0.01568 160.62)",
+          "oklch(49.29% 0.01568 160.62)",
+          "oklch(60.71% 0.01568 160.62)",
+          "oklch(72.14% 0.01568 160.62)",
+          "oklch(83.57% 0.01568 160.62)",
+          "oklch(95.00% 0.01568 160.62)"
+        ]
+      },
+      "amber": {
+        "role": "semantic",
+        "displayName": "Attention amber",
+        "tonalRamp": [
+          "oklch(15.00% 0.11415 73.46)",
+          "oklch(26.43% 0.11415 73.46)",
+          "oklch(37.86% 0.11415 73.46)",
+          "oklch(49.29% 0.11415 73.46)",
+          "oklch(60.71% 0.11415 73.46)",
+          "oklch(72.14% 0.11415 73.46)",
+          "oklch(83.57% 0.11415 73.46)",
+          "oklch(95.00% 0.11415 73.46)"
+        ]
+      },
+      "amber-soft": {
+        "role": "semantic",
+        "displayName": "Pale amber",
+        "tonalRamp": [
+          "oklch(15.00% 0.03213 81.00)",
+          "oklch(26.43% 0.03213 81.00)",
+          "oklch(37.86% 0.03213 81.00)",
+          "oklch(49.29% 0.03213 81.00)",
+          "oklch(60.71% 0.03213 81.00)",
+          "oklch(72.14% 0.03213 81.00)",
+          "oklch(83.57% 0.03213 81.00)",
+          "oklch(95.00% 0.03213 81.00)"
+        ]
+      },
+      "red": {
+        "role": "semantic",
+        "displayName": "Error red",
+        "tonalRamp": [
+          "oklch(15.00% 0.15407 20.83)",
+          "oklch(26.43% 0.15407 20.83)",
+          "oklch(37.86% 0.15407 20.83)",
+          "oklch(49.29% 0.15407 20.83)",
+          "oklch(60.71% 0.15407 20.83)",
+          "oklch(72.14% 0.15407 20.83)",
+          "oklch(83.57% 0.15407 20.83)",
+          "oklch(95.00% 0.15407 20.83)"
+        ]
+      },
+      "red-soft": {
+        "role": "semantic",
+        "displayName": "Pale red",
+        "tonalRamp": [
+          "oklch(15.00% 0.01640 8.16)",
+          "oklch(26.43% 0.01640 8.16)",
+          "oklch(37.86% 0.01640 8.16)",
+          "oklch(49.29% 0.01640 8.16)",
+          "oklch(60.71% 0.01640 8.16)",
+          "oklch(72.14% 0.01640 8.16)",
+          "oklch(83.57% 0.01640 8.16)",
+          "oklch(95.00% 0.01640 8.16)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Default working page heading."
+      },
+      "headline-wide": {
+        "displayName": "Headline Wide",
+        "purpose": "Page heading from 1440px."
+      },
+      "headline-mobile": {
+        "displayName": "Headline Mobile",
+        "purpose": "Phone page heading."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Default selected-role heading."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Interface body text."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Standard button text."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Compact status text."
+      },
+      "navigation": {
+        "displayName": "Navigation",
+        "purpose": "Desktop primary navigation text."
+      }
+    },
+    "shadows": [
+      {
+        "name": "more-menu",
+        "value": "0 18px 48px rgb(16 17 22 / 16%)",
+        "purpose": "More navigation overlay."
+      },
+      {
+        "name": "transient-overlay",
+        "value": "var(--shadow-soft, 0 14px 40px rgb(23 29 43 / 14%))",
+        "purpose": "Shared dialogs and popovers."
+      },
+      {
+        "name": "assistant-launcher",
+        "value": "0 4px 16px rgb(23 29 43 / 16%)",
+        "purpose": "Floating assistant control."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-feedback",
+        "value": "160ms ease",
+        "purpose": "Shared button color and border transitions."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0.01ms",
+        "purpose": "Animation and transition duration under prefers-reduced-motion; smooth scrolling is disabled."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone-max",
+        "value": "760px"
+      },
+      {
+        "name": "compact-discovery-max",
+        "value": "999px"
+      },
+      {
+        "name": "wide-editor-min",
+        "value": "1180px"
+      },
+      {
+        "name": "wide-type-min",
+        "value": "1440px"
+      }
+    ],
+    "pipelineFlow": {
+      "placement": "Collapsed inline section between page header and board/list toolbar",
+      "source": "Saved applications and status_changed events scoped to the current owner",
+      "geometry": "Prefix-tree Sankey with independent branch corridors, 88-unit branch gap, adjacent-column links and naturally placed terminal nodes; same-name current outcomes aggregate in the legend",
+      "responsive": "Focusable horizontal chart scroll area, single-column current-status legend on phones",
+      "export": "Local SVG download, no AI request",
+      "labels": "Above protected straight departures or beside terminal bars; never over flow bands"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary committed action.",
+      "html": "<button type=\"button\" class=\"ds-button-primary\">保存修改</button>",
+      "css": ".ds-button-primary{font-family:\"Helvetica Neue\", Arial, \"PingFang SC\", \"Microsoft YaHei\", sans-serif;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 16px;font-size:13px;font-weight:600;line-height:1.4;border:1px solid var(--accent, #1455f3);border-radius:4px;color:var(--surface, #ffffff);background:var(--accent, #1455f3);cursor:pointer;transition:background .16s ease,color .16s ease,border-color .16s ease;}.ds-button-primary:hover{background:var(--accent-hover, #0842cb);border-color:var(--accent-hover, #0842cb);}.ds-button-primary:focus-visible{outline:2px solid var(--accent, #1455f3);outline-offset:3px;}.ds-button-primary:active{transform:none;}.ds-button-primary:disabled{opacity:.58;cursor:not-allowed;}@media(prefers-reduced-motion:reduce){.ds-button-primary{transition-duration:.01ms;}}"
+    },
+    {
+      "name": "Secondary button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Supporting action on the white working plane.",
+      "html": "<button type=\"button\" class=\"ds-button-secondary\">查看完整岗位</button>",
+      "css": ".ds-button-secondary{font-family:\"Helvetica Neue\", Arial, \"PingFang SC\", \"Microsoft YaHei\", sans-serif;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 16px;font-size:13px;font-weight:600;line-height:1.4;border:1px solid var(--line, #d8dfe8);border-radius:4px;color:var(--ink, #101116);background:var(--surface, #ffffff);cursor:pointer;transition:background .16s ease,color .16s ease,border-color .16s ease;}.ds-button-secondary:hover{background:var(--surface-subtle, #f7f9fc);border-color:var(--field-border, #b8c2d1);}.ds-button-secondary:focus-visible{outline:2px solid var(--accent, #1455f3);outline-offset:3px;}.ds-button-secondary:active{transform:none;}.ds-button-secondary:disabled{opacity:.58;cursor:not-allowed;}@media(prefers-reduced-motion:reduce){.ds-button-secondary{transition-duration:.01ms;}}"
+    },
+    {
+      "name": "Quiet button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Low-emphasis utility action.",
+      "html": "<button type=\"button\" class=\"ds-button-quiet\">手动添加</button>",
+      "css": ".ds-button-quiet{font-family:\"Helvetica Neue\", Arial, \"PingFang SC\", \"Microsoft YaHei\", sans-serif;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 16px;font-size:13px;font-weight:600;line-height:1.4;border:1px solid transparent;border-radius:4px;color:var(--accent, #1455f3);background:transparent;cursor:pointer;transition:background .16s ease,color .16s ease,border-color .16s ease;}.ds-button-quiet:hover{background:var(--accent-soft, #eef3ff);}.ds-button-quiet:focus-visible{outline:2px solid var(--accent, #1455f3);outline-offset:3px;}.ds-button-quiet:active{transform:none;}.ds-button-quiet:disabled{opacity:.58;cursor:not-allowed;}@media(prefers-reduced-motion:reduce){.ds-button-quiet{transition-duration:.01ms;}}"
+    },
+    {
+      "name": "Labeled field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Canonical editable job-form field with visible label.",
+      "html": "<label class=\"ds-field\">岗位名称<input placeholder=\"输入岗位名称\" /></label>",
+      "css": ".ds-field{font-family:\"Helvetica Neue\", Arial, \"PingFang SC\", \"Microsoft YaHei\", sans-serif;display:grid;gap:8px;font-size:13px;font-weight:660;color:var(--ink, #101116);}.ds-field input{font-family:\"Helvetica Neue\", Arial, \"PingFang SC\", \"Microsoft YaHei\", sans-serif;min-width:0;min-height:44px;padding:0 12px;font-size:14px;color:var(--ink, #101116);background:var(--surface, #ffffff);border:1px solid var(--field-border, #b8c2d1);border-radius:3px;outline:none;caret-color:var(--accent, #1455f3);}.ds-field input::placeholder{color:var(--text-soft, #647085);opacity:1;}.ds-field input:focus{border-color:var(--accent, #1455f3);box-shadow:none;}@media(max-width:760px){.ds-field input{font-size:16px;}}"
+    },
+    {
+      "name": "Primary navigation",
+      "kind": "nav",
+      "refersTo": "navigation-active",
+      "description": "Desktop active navigation with blue bottom rule.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"主要导航\"><a href=\"#discovery\" aria-current=\"page\">岗位发现</a><a href=\"#pipeline\">申请进度</a><a href=\"#resumes\">简历工作室</a></nav>",
+      "css": ".ds-nav{font-family:\"Helvetica Neue\", Arial, \"PingFang SC\", \"Microsoft YaHei\", sans-serif;display:flex;gap:26px;min-height:78px;background:var(--surface, #ffffff);border-bottom:1px solid var(--line, #d8dfe8);}.ds-nav a{position:relative;display:flex;align-items:center;color:#363d49;font-size:15px;font-weight:500;text-decoration:none;}.ds-nav a:hover{color:var(--accent, #1455f3);}.ds-nav a[aria-current]{color:var(--ink, #101116);font-weight:750;}.ds-nav a[aria-current]::after{content:\"\";position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--accent, #1455f3);}.ds-nav a:focus-visible{outline:2px solid var(--accent, #1455f3);outline-offset:3px;}"
+    },
+    {
+      "name": "Attention status",
+      "kind": "chip",
+      "refersTo": "status-chip",
+      "description": "Text-bearing attention status using the existing semantic pair.",
+      "html": "<span class=\"ds-status\">可能已关闭</span>",
+      "css": ".ds-status{font-family:\"Helvetica Neue\", Arial, \"PingFang SC\", \"Microsoft YaHei\", sans-serif;display:inline-flex;align-items:center;min-height:24px;padding:4px 8px;font-size:12px;font-weight:500;border-radius:2px;color:var(--amber, #a16d18);background:var(--amber-soft, #fff2dc);}"
+    },
+    {
+      "name": "Pipeline entry",
+      "kind": "card",
+      "refersTo": "pipeline-card",
+      "description": "Open lane entry; text is illustrative panel content.",
+      "html": "<div class=\"ds-lane\"><article class=\"ds-pipeline\"><a href=\"#application\"><strong>Product Engineer</strong><small>示例公司 · 演示</small></a><p>下一步 · 准备面试问题</p></article></div>",
+      "css": ".ds-lane{background:var(--surface-muted, #f2f5f9);padding:0 14px;}.ds-pipeline{font-family:\"Helvetica Neue\", Arial, \"PingFang SC\", \"Microsoft YaHei\", sans-serif;padding:22px 2px;color:var(--ink, #101116);background:transparent;border-bottom:1px solid var(--line, #d8dfe8);}.ds-pipeline:hover{border-color:var(--field-border, #b8c2d1);}.ds-pipeline a{display:grid;gap:6px;text-decoration:none;color:inherit;}.ds-pipeline a:focus-visible{outline:2px solid var(--accent, #1455f3);outline-offset:3px;}.ds-pipeline strong{font-size:16px;line-height:1.55;}.ds-pipeline small{font-size:12px;color:var(--muted, #596477);}.ds-pipeline p{padding-top:12px;margin:14px 0 0;border-top:1px solid var(--line-soft, #e9edf2);font-size:13px;line-height:1.6;}"
+    },
+    {
+      "name": "Match reference",
+      "kind": "custom",
+      "refersTo": "score",
+      "description": "Compact score reference; sample value is illustrative, not product data.",
+      "html": "<div class=\"ds-score\"><strong>88<small>%</small></strong><span>匹配参考</span></div>",
+      "css": ".ds-score{font-family:\"Helvetica Neue\", Arial, \"PingFang SC\", \"Microsoft YaHei\", sans-serif;display:grid;align-content:center;width:112px;min-height:112px;padding:15px 8px;text-align:center;border-radius:4px;color:var(--surface, #ffffff);background:var(--accent, #1455f3);}.ds-score strong{font-size:48px;font-weight:750;line-height:1.05;letter-spacing:-.03em;font-variant-numeric:tabular-nums;}.ds-score strong small{font-size:22px;}.ds-score>span{font-size:12px;margin-top:7px;}"
+    },
+    {
+      "name": "Resume module outline",
+      "kind": "nav",
+      "refersTo": "editor-outline-active",
+      "description": "Module navigation for the semantic editor.",
+      "html": "<nav class=\"ds-outline\" aria-label=\"简历模块\"><a href=\"#basics\" aria-current=\"location\">基本信息</a><a href=\"#summary\">职业简介</a><a href=\"#experience\">工作经历</a></nav>",
+      "css": ".ds-outline{font-family:\"Helvetica Neue\", Arial, \"PingFang SC\", \"Microsoft YaHei\", sans-serif;padding:22px 14px 22px 0;background:var(--surface-muted, #f2f5f9);}.ds-outline a{display:flex;align-items:center;min-height:46px;padding:10px 16px;font-size:13px;color:var(--ink, #101116);text-decoration:none;}.ds-outline a[aria-current]{color:var(--accent, #1455f3);font-weight:700;background:var(--surface, #ffffff);box-shadow:inset 3px 0 var(--accent, #1455f3);}.ds-outline a:hover{color:var(--accent, #1455f3);}.ds-outline a:focus-visible{outline:2px solid var(--accent, #1455f3);outline-offset:3px;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "C Focus",
+    "overview": "JobPilot uses white and ice-gray working planes, confident black sans typography, thin dividers, and a focused cobalt accent. A horizontal navigation band anchors the workspace. Content is arranged as readable indexes, open work areas, and explicit actions rather than a collection of floating cards.\n\nThis is the C Focus direction. The system supports Chinese and English operational content and adapts its headline scale to laptop and phone widths. The interface chrome and the exported resume or cover-letter paper are separate systems: the saved PDF renderer and export templates retain their existing document styling.",
+    "keyCharacteristics": [
+      "White top navigation with a cobalt active rule; labeled bottom tabs on phones.",
+      "Large, bounded headings and compact utility text.",
+      "Continuous working planes, neutral indexes, and fine structural dividers.",
+      "Cobalt for primary actions and meaningful selection; explicit text for states."
+    ],
+    "rules": [],
+    "dos": [
+      "Do preserve the approved horizontal navigation and labeled phone tabs.",
+      "Do use the effective Focus tokens and check the complete stylesheet cascade before extending a surface.",
+      "Do keep source, uncertainty, guidance, and status text beside match evidence.",
+      "Do retain explicit focus, menu/dialog dismissal, return focus, and reduced-motion behavior.",
+      "Do contain wide boards, tables, and editor panes within their own scrolling regions.",
+      "Do label the editor PDF as saved content and keep exported document templates independent of interface styling."
+    ],
+    "donts": [
+      "Don't restore the blue sidebar or horizontal opportunity strip from the superseded composition.",
+      "Don't turn continuous work areas into a stack of rounded, shadowed cards.",
+      "Don't use color alone to communicate navigation, status, or selection.",
+      "Don't copy synthetic comp content, source claims, or demo scores into production data.",
+      "Don't describe the saved PDF pane as a live preview of unsaved edits.",
+      "Don't impose the discovery index/detail layout on every route."
+    ]
+  }
+}

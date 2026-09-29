@@ -122,7 +122,7 @@ export function LoginForm({ locale, nextPath, initialError }: { locale: "zh" | "
   return <div className="login-shell">
     <section className="login-panel">
       <AuthLanguageSwitch locale={locale} />
-      <header><span className="brand-mark"><BriefcaseBusiness size={20} /></span><div><p className="eyebrow">JOBPILOT CLOUD</p><h1>{text("登录 JobPilot", "Sign in to JobPilot")}</h1><p>{text("你的简历、岗位和申请进度只会显示在自己的账户中。", "Your resumes, jobs, and application history stay inside your account.")}</p></div></header>
+      <header><span className="brand-mark"><BriefcaseBusiness size={20} /></span><div><h1>{mode === "signin" ? text("登录 JobPilot", "Sign in to JobPilot") : mode === "signup" ? text("创建 JobPilot 账户", "Create your account") : text("重置密码", "Reset your password")}</h1><p>{text("你的简历、岗位和申请进度只会显示在自己的账户中。", "Your resumes, jobs, and application history stay inside your account.")}</p></div></header>
       {googleAuthEnabled && mode !== "recovery" ? <>
         <button className="button button-secondary login-google" disabled={pending} onClick={googleLogin} type="button"><Globe2 size={17} />{text("使用 Google 继续", "Continue with Google")}</button>
         <div className="login-divider"><span>{text("或使用邮箱", "or use email")}</span></div>
@@ -131,7 +131,7 @@ export function LoginForm({ locale, nextPath, initialError }: { locale: "zh" | "
         <label>{text("邮箱", "Email")}<span className="input-with-icon"><Mail size={16} /><input autoComplete="email" name="email" onChange={(event) => setEmail(event.target.value)} required type="email" value={email} /></span></label>
         {mode !== "recovery" ? <label>{text("密码", "Password")}<span className="input-with-icon"><LockKeyhole size={16} /><input autoComplete={mode === "signin" ? "current-password" : "new-password"} minLength={8} name="password" required type="password" /></span></label> : null}
         {mode === "signin" ? <button className="login-forgot-password" onClick={() => { setMode("recovery"); setMessage(""); setConfirmationPending(false); }} type="button">{text("忘记密码？", "Forgot password?")}</button> : null}
-        {message ? <p className={messageTone === "success" ? "form-success" : "form-error"}>{message}</p> : null}
+        {message ? <p role={messageTone === "success" ? "status" : "alert"} className={messageTone === "success" ? "form-success" : "form-error"}>{message}</p> : null}
         <button className="button button-primary" disabled={pending} type="submit">{pending ? <LoaderCircle className="spin" size={16} /> : <ArrowRight size={16} />}{mode === "signin" ? text("登录", "Sign in") : mode === "signup" ? text("创建账户", "Create account") : text("发送重置邮件", "Send reset email")}</button>
         {confirmationPending ? <button className="button button-secondary login-resend" disabled={pending} onClick={resendConfirmation} type="button"><Mail size={16} />{text("重新发送验证邮件", "Resend confirmation email")}</button> : null}
       </form>

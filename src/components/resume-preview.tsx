@@ -105,7 +105,7 @@ function PdfCanvasPreview({ data, requestKey, locale }: { data: Uint8Array; requ
   </div>;
 }
 
-export function ResumePreview({ locale, resumeId, hasOriginal, originalType }: { locale: Locale; resumeId: string; hasOriginal: boolean; originalType: string }) {
+export function ResumePreview({ locale, resumeId, hasOriginal, originalType, compact = false }: { compact?: boolean; locale: Locale; resumeId: string; hasOriginal: boolean; originalType: string }) {
   const originalPreviewable = hasOriginal && originalType === "pdf";
   const options: TemplateOption[] = hasOriginal ? [{ id: "original", zh: "原版", en: "Original", descriptionZh: originalPreviewable ? "直接显示上传的 PDF，版式完全不变。" : "原件会保持不变；此文件类型请下载后查看。", descriptionEn: originalPreviewable ? "Displays the uploaded PDF directly with no layout changes." : "The source stays unchanged; download this file type to view it." }, ...generatedTemplates] : generatedTemplates;
   const [template, setTemplate] = useState<PreviewChoice>(originalPreviewable ? "original" : "modern");
@@ -145,8 +145,8 @@ export function ResumePreview({ locale, resumeId, hasOriginal, originalType }: {
   }, [requestKey, shouldLoadPreview, sourceUrl]);
 
   return (
-    <div className="resume-preview-workspace">
-      <div className="resume-preview-toolbar">
+    <div className={`resume-preview-workspace ${compact ? "compact-preview" : ""}`}>
+      {!compact ? <div className="resume-preview-toolbar">
         <div className="segmented-control" aria-label={text("简历风格", "Resume style")}>
           {options.map((item) => <button className={template === item.id ? "active" : ""} key={item.id} onClick={() => setTemplate(item.id)} type="button">{locale === "zh" ? item.zh : item.en}</button>)}
         </div>
@@ -157,7 +157,7 @@ export function ResumePreview({ locale, resumeId, hasOriginal, originalType }: {
             <a className="button button-primary" href={`/resumes/${resumeId}/export?format=pdf&template=${template}`}><Download size={16} />{text("下载 PDF", "Download PDF")}</a>
           </>}
         </div>
-      </div>
+      </div> : null}
       {original && !originalPreviewable ? <div className="resume-source-unavailable"><FileText size={28} /><h2>{text("原件已安全保留", "Original file preserved")}</h2><p>{text("DOCX 和 TXT 无法在浏览器中保证与原应用完全一致，请下载原件查看。", "DOCX and TXT cannot be rendered identically in the browser. Download the source to view it in its original application.")}</p><a className="button button-primary" href={`/resumes/${resumeId}/source`}><Download size={16} />{text("下载原件", "Download original")}</a></div> : <div className="resume-pdf-stage">
         {previewLoading ? <div className="resume-preview-state" role="status"><LoaderCircle className="spin" size={26} /><strong>{text("正在生成预览", "Generating preview")}</strong><span>{text("较长的简历可能需要几秒钟。", "Longer resumes can take a few seconds.")}</span></div> : null}
         {!previewLoading && previewError ? <div className="resume-preview-state resume-preview-error" role="alert"><AlertCircle size={28} /><strong>{text("预览生成失败", "Preview unavailable")}</strong><span>{text("暂时无法生成这个预览。请重试；若仍失败，可先下载 DOCX。", "This preview could not be generated. Retry, or download the DOCX if the issue continues.")}</span><button className="button button-secondary" type="button" onClick={() => setRetryKey((value) => value + 1)}><RefreshCw size={16} />{text("重新加载", "Retry")}</button></div> : null}

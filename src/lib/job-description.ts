@@ -41,6 +41,26 @@ export function cleanJobText(value: string) {
     .trim();
 }
 
+const pageControlLine = /^(?:apply(?: now| for (?:this )?(?:job|position))?|easy apply|quick apply|save(?: job)?|saved|share(?: job)?|report(?: this)? job|follow|sign in|log in|register|create (?:a )?job alert|set alert|show (?:more|less)|see (?:all|more) jobs|view (?:all|more) jobs|similar jobs|recommended jobs|people also viewed|previous|next|back|close|cancel|accept(?: all)? cookies|cookie settings|申请(?:职位|岗位|该职位|该岗位)?|立即申请|快速申请|一键申请|收藏(?:职位|岗位)?|已收藏|分享(?:职位|岗位)?|举报(?:职位|岗位)?|关注|登录|注册|创建职位提醒|设置提醒|展开|收起|查看更多职位|相似职位|推荐职位|上一页|下一页|返回|关闭|取消|接受所有 Cookie|Cookie 设置)[.!。！]?$/i;
+
+export function stripJobPageNoise(value: string) {
+  const seenControls = new Set<string>();
+  return cleanJobText(value)
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter((line) => {
+      if (line.length > 100 || !pageControlLine.test(line)) return true;
+      const key = line.toLocaleLowerCase();
+      if (seenControls.has(key)) return false;
+      seenControls.add(key);
+      return false;
+    })
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 function sourceLocale(value: string): "zh" | "en" {
   const chinese = value.match(/[\u3400-\u9fff]/g)?.length ?? 0;
   return chinese >= Math.max(8, value.length * 0.03) ? "zh" : "en";

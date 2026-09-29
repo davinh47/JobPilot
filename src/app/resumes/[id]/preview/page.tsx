@@ -18,7 +18,7 @@ export default async function ResumePreviewPage({ params }: { params: Promise<{ 
   return (
     <div className="page-shell preview-page">
       <Link className="back-link" href="/resumes"><ArrowLeft size={16} />{pick(locale, "返回简历工作室", "Back to resume studio")}</Link>
-      <header className="page-header"><div><p className="eyebrow">RESUME PREVIEW</p><h1>{resume.title}</h1><p className="page-description">{pick(locale, "原版保留上传文件的视觉格式；其他模板使用可编辑的 JobPilot 内容重新排版。", "Original preserves the uploaded file's visual format; other templates lay out the editable JobPilot content.")}</p></div><Link className="button button-secondary" href={`/resumes/${id}/edit`}><PenLine size={16} />{pick(locale, "编辑内容", "Edit content")}</Link></header>
+      <header className="page-header"><div><h1>{resume.title}</h1><p className="page-description">{pick(locale, "原版保留上传文件的视觉格式；其他模板使用可编辑的 JobPilot 内容重新排版。", "Original preserves the uploaded file's visual format; other templates lay out the editable JobPilot content.")}</p></div><Link className="button button-secondary" href={`/resumes/${id}/edit`}><PenLine size={16} />{pick(locale, "编辑内容", "Edit content")}</Link></header>
       <ResumePreview hasOriginal={Boolean(resume.originalStoragePath)} locale={locale} originalType={resume.sourceType} resumeId={id} />
     </div>
   );
